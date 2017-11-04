@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux';
-import LibraryReducer from './LibraryReducer';
-import SelectedReducer from './SelectedReducer';
+
+import AuthReducer from './AuthReducer';
 
 export default combineReducers({
-  libraries: LibraryReducer,
-  selected: SelectedReducer
+  auth: AuthReducer
 });
 
 // application store now has a 'state' of libraries
 // libraries: []
+// dummy reducer:
+// dummy: () => []

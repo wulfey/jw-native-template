@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInput, Text, View } from 'react-native';
 
-const InputBox = ({
+const Input = ({
   label,
   value,
   onChangeText,
@@ -49,4 +49,4 @@ const styles = {
   }
 };
 
-export { InputBox };
+export { Input };

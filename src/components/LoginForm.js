@@ -1,78 +1,79 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 import { Text, View, TextInput } from 'react-native';
-import { Button, Card, CardSection, InputBox, Spinner } from './common';
+import firebase from 'firebase';
+import { connect } from 'react-redux';
+import * as actions from '../actions/index';
 
-export default class LoginForm extends Component {
-  state = { email: '', password: '', error: '', loading: false };
+// import { emailChanged, passwordChanged } from '../actions/';
+
+import { Button, Card, CardSection, Input, Spinner } from './common';
+
+class LoginForm extends Component {
+  componentWillReceiveProps() {
+    console.log(this.props);
+    if (this.props.user !== null) {
+      this.props.navigation.navigate('Employees');
+    }
+  }
+
+  onEmailChange(text) {
+    this.props.emailChanged(text);
+  }
+  onPasswordChange(text) {
+    this.props.passwordChanged(text);
+  }
   onButtonPress() {
-    this.setState({ error: '', loading: true });
-    const { email, password } = this.state;
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(this.onLoginSuccess.bind(this))
-      .catch(() => {
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(email, password)
-          .then(this.onLoginSuccess.bind(this))
-          .catch(this.onLoginFail.bind(this));
-      });
-  }
-
-  onLoginFail() {
-    console.log('Login Failed');
-    this.setState({ error: 'Authentication Failed.', loading: false });
-  }
-
-  onLoginSuccess() {
-    console.log('Login Successful');
-    this.setState({
-      email: '',
-      password: '',
-      error: '',
-      loading: false
-    });
+    console.log(this.props);
+    const { email, password } = this.props;
+    this.props.loginUser({ email, password });
   }
 
   renderButton() {
-    if (this.state.loading) {
+    if (this.props.loading) {
       return <Spinner size="small" />;
     }
-    return <Button onPress={this.onButtonPress.bind(this)}>Log In</Button>;
+
+    return <Button onPress={this.onButtonPress.bind(this)}>Login</Button>;
   }
 
   render() {
     const { errorTextStyle } = styles;
+
     return (
       <Card>
         <CardSection>
-          <InputBox
+          <Input
             label={'Email'}
-            onChangeText={email => this.setState({ email })}
-            value={this.state.email}
+            onChangeText={this.onEmailChange.bind(this)}
+            value={this.props.email}
             placeholder={'email@gmail.com'}
           />
         </CardSection>
-
         <CardSection>
-          <InputBox
+          <Input
             label={'Password'}
-            onChangeText={password => this.setState({ password })}
-            value={this.state.password}
+            onChangeText={this.onPasswordChange.bind(this)}
+            value={this.props.password}
             placeholder={'*********'}
             secureTextEntry
           />
         </CardSection>
 
-        <Text style={errorTextStyle}>{this.state.error}</Text>
+        <Text style={errorTextStyle}>{this.props.error}</Text>
 
         <CardSection>{this.renderButton()}</CardSection>
       </Card>
     );
   }
 }
+
+// map APPLICATION level REDSUX state to props ...
+// const mapStateToProps = state => {
+//   return {
+//     email: state.auth.email,
+//     password: state.auth.password
+//   };
+// };
 
 const styles = {
   errorTextStyle: {
@@ -81,3 +82,13 @@ const styles = {
     color: 'red'
   }
 };
+
+const mapStateToProps = ({
+  auth: { email, password, error, loading, user }
+}) => {
+  return { email, password, error, loading, user };
+};
+
+// const NavigationLoginForm = withNavigation(LoginForm);
+
+export default connect(mapStateToProps, actions)(LoginForm);

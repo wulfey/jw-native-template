@@ -5,17 +5,20 @@ import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import firebase from 'firebase';
 
-import RootNavigator from './RootNavigator';
-import reducers from './reducers';
+import AppReducer from './reducers';
+import AppWithNavigationState from './navigators/AppNavigator';
 import LoginForm from './components/LoginForm';
 
-import {
-  Header,
-  Button,
-  Card,
-  CardSection,
-  Spinner
-} from './components/common';
+//refactored to match:
+// https://github.com/react-community/react-navigation/blob/master/examples/ReduxExample/App.js
+
+// import {
+//   Header,
+//   Button,
+//   Card,
+//   CardSection,
+//   Spinner
+// } from './components/common';
 
 export default class App extends Component {
   state = { loggedIn: null };
@@ -34,11 +37,11 @@ export default class App extends Component {
   // <Header headerText="Redux Stack" />
   // <RootNavigator />
   render() {
-    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
+    const store = createStore(AppReducer, {}, applyMiddleware(ReduxThunk));
     return (
       <Provider store={store}>
         <View style={styles.containerView}>
-          <RootNavigator />
+          <AppWithNavigationState />
         </View>
       </Provider>
     );

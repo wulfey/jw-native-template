@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import firebase from 'firebase';
 
-import AppReducer from './reducers';
+import AppReducer from './reducers/index';
 import AppWithNavigationState from './navigators/AppNavigator';
-import LoginForm from './components/LoginForm';
 
 //refactored to match:
 // https://github.com/react-community/react-navigation/blob/master/examples/ReduxExample/App.js

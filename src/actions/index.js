@@ -1,12 +1,12 @@
 import firebase from 'firebase';
-import { NavigationActions } from 'react-navigation';
 
 import {
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
-  LOGIN_USER
+  LOGIN_USER,
+  LOGOUT
 } from './types';
 
 export function emailChanged(text) {
@@ -38,6 +38,20 @@ export const loginUser = ({ email, password }) => {
           .createUserWithEmailAndPassword(email, password)
           .then(user => onLoginSuccess(dispatch, user))
           .catch(() => onLoginFail(dispatch));
+      });
+  };
+};
+
+export const logout = () => {
+  return dispatch => {
+    dispatch({ type: LOGOUT });
+
+    firebase
+      .auth()
+      .signOut()
+      .then(() => console.log('Signed Out'))
+      .catch(error => {
+        console.log(error);
       });
   };
 };

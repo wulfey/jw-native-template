@@ -3,7 +3,8 @@ import {
   PASSWORD_CHANGED,
   LOGIN_USER_SUCCESS,
   LOGIN_USER_FAIL,
-  LOGIN_USER
+  LOGIN_USER,
+  LOGOUT
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -11,7 +12,8 @@ const INITIAL_STATE = {
   password: '',
   loading: false,
   error: '',
-  user: null
+  user: null,
+  isLoggedIn: false
 };
 
 //state argument is not application state, it is the state for this reducer
@@ -27,9 +29,16 @@ export default (state = INITIAL_STATE, action) => {
     case LOGIN_USER:
       return { ...state, loading: true, error: '' };
     case LOGIN_USER_SUCCESS:
-      return { ...state, ...INITIAL_STATE, user: action.payload };
+      return {
+        ...state,
+        ...INITIAL_STATE,
+        user: action.payload,
+        isLoggedIn: true
+      };
     case LOGIN_USER_FAIL:
       return { ...state, ...INITIAL_STATE, error: 'Authentication failed.' };
+    case LOGOUT:
+      return { ...state, ...INITIAL_STATE, user: null, isLoggedIn: false };
     default:
       return state;
   }

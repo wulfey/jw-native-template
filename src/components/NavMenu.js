@@ -80,7 +80,7 @@ class NavMenu extends Component {
       <CardSection>
         {this.MainButton(current === 'Main')}
         {this.EmployeesButton(current === 'Employees')}
-        {this.LoginButton(current === 'Login')}
+        {this.LoginButton(current === 'Account')}
       </CardSection>
     );
   }
